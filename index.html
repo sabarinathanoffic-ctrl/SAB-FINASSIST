@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAB FINASSIST</title>
+    <meta name="description" content="Comprehensive finance dashboard with advanced filtering and cards management">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!-- Login Overlay -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-card glass-card">
+        <div class="login-header">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" fill="url(#logoGradient)" opacity="0.2" />
+                    <path d="M20 8L28 14V26L20 32L12 26V14L20 8Z" fill="url(#logoGradient)" />
+                </svg>
+                <h2>SAB FINASSIST Login</h2>
+            </div>
+            <p>Please enter your credentials to continue</p>
+        </div>
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" required>
+            </div>
+            <div class="form-options">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="rememberMe">
+                    <span class="checkmark"></span>
+                    Remember Me
+                </label>
+            </div>
+            <button type="submit" class="btn-primary login-btn">Login</button>
+        </form>
+        <div id="loginError" class="error-msg hidden">Invalid credentials. Please try again.</div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p>Loading your dashboard...</p>
+</div>
+
+<!-- Main Container -->
+<div class="dashboard-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar glass-card">
+        <div class="sidebar-header">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" fill="url(#logoGradient)" opacity="0.2" />
+                    <path d="M20 8L28 14V26L20 32L12 26V14L20 8Z" fill="url(#logoGradient)" />
+                    <defs>
+                        <linearGradient id="logoGradient" x1="8" y1="8" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#667eea" />
+                            <stop offset="100%" stop-color="#764ba2" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>SAB FINASSIST</h1>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="transactions">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h12a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6z" />
+                </svg>
+                <span>Transactions</span>
+            </a>
+            <a href="#" class="nav-item" data-page="cards">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                    <path fill-rule="evenodd"
+                        d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" />
+                </svg>
+                <span>Cards</span>
+            </a>
+            <a href="#" class="nav-item" data-page="analytics">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                </svg>
+                <span>Spend Analytics</span>
+            </a>
+            <a href="#" class="nav-item" data-page="settings">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="nav-item" id="logoutBtn" style="margin-top: auto; color: var(--error);">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </aside>
+
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page active">
+            <header class="dashboard-header">
+                <div class="greeting">
+                    <h2>Hello, User!!</h2>
+                    <p>Welcome back!</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn glass-card" id="refreshBtn" title="Refresh Data">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" />
+                        </svg>
+                    </button>
+                    <button class="icon-btn glass-card" id="addTransactionBtn" title="Add Transaction">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Summary Cards -->
+            <section class="summary-cards">
+                <div class="summary-card glass-card balance-card">
+                    <div class="card-header">
+                        <div class="card-icon balance-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z" />
+                            </svg>
+                        </div>
+                        <span class="card-label">Current Balance</span>
+                    </div>
+                    <div class="card-value" id="currentBalance">₹0</div>
+                    <div class="card-footer">
+                        <span class="change-indicator positive" id="balanceChange">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 3l4 4H2l4-4z" />
+                            </svg>
+                            +0%
+                        </span>
+                        <span class="change-label">from last month</span>
+                    </div>
+                    <div class="card-decoration"></div>
+                </div>
+
+                <div class="summary-card glass-card income-card">
+                    <div class="card-header">
+                        <div class="card-icon income-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M7 11h10v2H7zm0-4h10v2H7zm0 8h7v2H7zm13-9v16H4V6h16m0-2H4c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2z" />
+                            </svg>
+                        </div>
+                        <span class="card-label">Total Income</span>
+                    </div>
+                    <div class="card-value" id="totalIncome">₹0</div>
+                    <div class="card-footer">
+                        <span class="change-indicator positive" id="incomeChange">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 3l4 4H2l4-4z" />
+                            </svg>
+                            +0%
+                        </span>
+                        <span class="change-label">from last month</span>
+                    </div>
+                    <div class="card-decoration"></div>
+                </div>
+
+                <div class="summary-card glass-card expense-card">
+                    <div class="card-header">
+                        <div class="card-icon expense-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9-1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V7h2z" />
+                            </svg>
+                        </div>
+                        <span class="card-label">Total Expenses</span>
+                    </div>
+                    <div class="card-value" id="totalExpenses">₹0</div>
+                    <div class="card-footer">
+                        <span class="change-indicator negative" id="expenseChange">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 9L2 5h8l-4 4z" />
+                            </svg>
+                            +0%
+                        </span>
+                        <span class="change-label">from last month</span>
+                    </div>
+                    <div class="card-decoration"></div>
+                </div>
+            </section>
+
+            <!-- Chart Section -->
+            <section class="chart-section glass-card">
+                <div class="chart-header">
+                    <h3>Monthly Overview</h3>
+                    <div class="chart-legend">
+                        <span class="legend-item">
+                            <span class="legend-dot income-dot"></span>
+                            Income
+                        </span>
+                        <span class="legend-item">
+                            <span class="legend-dot expense-dot"></span>
+                            Expenses
+                        </span>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="transactionChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Latest Transactions -->
+            <section class="transactions-section glass-card">
+                <div class="section-header">
+                    <h3>Latest Transactions</h3>
+                </div>
+                <div class="transactions-table" id="transactionsTable">
+                    <div class="loading-skeleton">
+                        <div class="skeleton-row"></div>
+                        <div class="skeleton-row"></div>
+                        <div class="skeleton-row"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Transactions Page -->
+        <div id="transactionsPage" class="page">
+            <header class="page-header">
+                <h2>All Transactions</h2>
+                <button class="icon-btn glass-card" id="addTransactionBtn2" title="Add Transaction"
+                    onclick="document.getElementById('addTransactionBtn').click()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Filters -->
+            <section class="filters-section glass-card">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label>Type</label>
+                        <select id="filterType" class="filter-input">
+                            <option value="">All Types</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Account</label>
+                        <select id="filterAccount" class="filter-input">
+                            <option value="">All Accounts</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <select id="filterCategory" class="filter-input">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Transferred To</label>
+                        <select id="filterTransferredTo" class="filter-input">
+                            <option value="">All Recipients</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" id="filterDescription" class="filter-input"
+                            placeholder="Search description...">
+                    </div>
+                    <div class="filter-group">
+                        <label>Min Amount</label>
+                        <input type="number" id="filterAmountMin" class="filter-input" placeholder="₹0">
+                    </div>
+                    <div class="filter-group">
+                        <label>Max Amount</label>
+                        <input type="number" id="filterAmountMax" class="filter-input" placeholder="₹999999">
+                    </div>
+                    <div class="filter-group">
+                        <label>Date From</label>
+                        <input type="date" id="filterDateStart" class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <label>Date To</label>
+                        <input type="date" id="filterDateEnd" class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <button id="clearFilters" class="btn-secondary" style="margin-top: 1.5rem;">Clear
+                            Filters</button>
+                    </div>
+                </div>
+                <div class="filter-results">
+                    <span id="filterCount">Showing all transactions</span>
+                </div>
+            </section>
+
+            <!-- Full Transactions Table -->
+            <section class="full-transactions glass-card">
+                <div class="table-container">
+                    <table class="transactions-full-table">
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Transferred To</th>
+                                <th>Type</th>
+                                <th>Account</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsFullTable">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 2rem;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Cards Page -->
+        <div id="cardsPage" class="page">
+            <header class="page-header">
+                <h2>My Cards</h2>
+                <button class="btn-primary" id="addCardBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 0.5rem;">
+                        <path fill-rule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                    </svg>
+                    Add Card
+                </button>
+            </header>
+
+            <section class="cards-grid" id="cardsGrid">
+                <p style="text-align: center; color: var(--text-secondary); padding: 2rem; grid-column: 1/-1;">
+                    Loading cards...</p>
+            </section>
+        </div>
+
+        <!-- Spend Analytics Page -->
+        <div id="analyticsPage" class="page">
+            <header class="page-header">
+                <h2>Spend Analytics</h2>
+                <div class="header-actions">
+                    <span class="badge"
+                        style="background: var(--success); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Real-time
+                        AI Insights</span>
+                </div>
+            </header>
+
+            <div class="analytics-grid">
+                <!-- Category Breakdown -->
+                <div class="analytics-card glass-card">
+                    <h3>Expenses by Category</h3>
+                    <div class="chart-container" style="margin-top: 1rem;">
+                        <canvas id="categoryPieChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Spending Trends Chart -->
+                <div class="analytics-card glass-card">
+                    <div class="chart-header">
+                        <h3>Spending Trends</h3>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #43e97b;"></div>
+                                <span>Income</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #667eea;"></div>
+                                <span>Expenses</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="spendingTrendChart"></canvas>
+                    </div>
+                </div>
+
+
+                <!-- AI Advisor Section -->
+                <div class="ai-advisor-section">
+                    <div class="ai-advisor-card glass-card">
+                        <div class="card-header">
+                            <div class="card-icon balance-icon" style="background: var(--accent-purple);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-13h4v2h-4V7zm0 4h4v2h-4v-2zm0 4h4v2h-4v-2z" />
+                                </svg>
+                            </div>
+                            <div class="header-text">
+                                <h3>Personal AI Financial Advisor</h3>
+                                <p>Ask me how to save or invest better!</p>
+                            </div>
+                        </div>
+
+                        <div class="ai-chat-container">
+                            <div class="chat-messages" id="aiChatMessages">
+                                <div class="message ai">
+                                    Hello! I've analyzed your spending habits. You've spent 15% more on dining this
+                                    month compared to last. Would you like some tips on how to save more?
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" id="aiChatInput" class="chat-input"
+                                    placeholder="Type your question here...">
+                                <button id="aiSendBtn" class="chat-send-btn">Send</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-insights-card glass-card">
+                        <h3>Real-time Insights</h3>
+                        <div class="ai-insights-list" id="aiInsightsList" style="margin-top: 1rem;">
+                            <div class="insight-item warning">
+                                <h5>High Subscription Spend</h5>
+                                <p>You have 3 recurring subscriptions totaling ₹2,499/month. Consider canceling
+                                    unused ones.</p>
+                            </div>
+                            <div class="insight-item saving">
+                                <h5>Investment Opportunity</h5>
+                                <p>Your current savings could earn ₹450 more per month in a Liquid Fund.</p>
+                            </div>
+                            <div class="insight-item">
+                                <h5>Spending Limit</h5>
+                                <p>You are at 85% of your 'Food & Dining' budget for this week.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settingsPage" class="page">
+            <header class="page-header">
+                <h2>Settings</h2>
+            </header>
+
+            <div class="settings-section">
+                <div class="settings-card glass-card">
+                    <h3>Appearance</h3>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Theme Mode</h4>
+                            <p>Switch between light and dark mode</p>
+                        </div>
+                        <div class="setting-action">
+                            <label class="theme-switch">
+                                <input type="checkbox" id="themeToggle">
+                                <span class="slider">
+                                    <span class="icon">☀️</span>
+                                    <span class="icon">🌙</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card glass-card">
+                    <h3>Account Security</h3>
+                    <form id="passwordResetForm" class="settings-form">
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem;">Old Password</label>
+                            <input type="password" id="oldPassword" class="filter-input"
+                                style="width: 100%; border-radius: 8px;" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem;">New Password</label>
+                            <input type="password" id="newPassword" class="filter-input"
+                                style="width: 100%; border-radius: 8px;" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem;">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" class="filter-input"
+                                style="width: 100%; border-radius: 8px;" required>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;">Update Password</button>
+                    </form>
+                    <div id="passwordResetMsg" style="margin-top: 1rem; text-align: center; font-size: 0.9rem;"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="right-sidebar">
+        <!-- Cards Display -->
+        <div class="cards-display-section glass-card">
+            <h4>My Cards</h4>
+            <div id="cardsDisplay">
+                <p style="text-align: center; color: var(--text-secondary); padding: 1rem;">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Recent Transfers -->
+        <div class="recent-transfers glass-card">
+            <h4>Recent Transfers</h4>
+            <div class="transfer-contacts" id="recentTransfers">
+                <p style="text-align: center; color: var(--text-secondary); padding: 1rem;">Loading...</p>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- Add Transaction Modal -->
+<div id="addTransactionModal" class="modal">
+    <div class="modal-content glass-card">
+        <div class="modal-header">
+            <h3>Add New Transaction</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <form id="transactionForm">
+            <div class="form-group">
+                <label for="transactionDate">Date & Time</label>
+                <input type="datetime-local" id="transactionDate" required>
+            </div>
+            <div class="form-group">
+                <label for="transactionTo">Transferred To</label>
+                <input type="text" id="transactionTo" placeholder="e.g., Amazon, Swiggy" required>
+            </div>
+            <div class="form-group">
+                <label for="transactionType">Type</label>
+                <select id="transactionType" required>
+                    <option value="">Select Type</option>
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transactionAccount">Account/Card</label>
+                <select id="transactionAccount" required>
+                    <option value="">Select Account</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transactionCategory">Category</label>
+                <select id="transactionCategory" required>
+                    <option value="">Select Category</option>
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Investment">Investment</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="transactionDescription">Description</label>
+                <input type="text" id="transactionDescription" placeholder="e.g., Lunch order" required>
+            </div>
+            <div class="form-group">
+                <label for="transactionAmount">Amount (₹)</label>
+                <input type="number" id="transactionAmount" step="0.01" placeholder="0.00" required>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="transactionCancelBtn">Cancel</button>
+                <button type="submit" class="btn-primary">Add Transaction</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Card Modal -->
+<div id="addCardModal" class="modal">
+    <div class="modal-content glass-card">
+        <div class="modal-header">
+            <h3>Add New Card</h3>
+            <button class="close-modal">&times;</button>
+        </div>
+        <form id="cardForm">
+            <div class="form-group">
+                <label for="cardName">Card Name</label>
+                <input type="text" id="cardName" placeholder="e.g., HDFC Credit Card" required>
+            </div>
+            <div class="form-group">
+                <label for="cardType">Card Type</label>
+                <select id="cardType" required>
+                    <option value="">Select Type</option>
+                    <option value="Credit">Credit Card</option>
+                    <option value="Debit">Debit Card</option>
+                    <option value="Savings">Savings Account</option>
+                    <option value="Wallet">Digital Wallet</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cardBank">Bank Name</label>
+                <input type="text" id="cardBank" placeholder="e.g., HDFC Bank" required>
+            </div>
+            <div class="form-group">
+                <label for="cardLast4">Last 4 Digits</label>
+                <input type="text" id="cardLast4" placeholder="1234" maxlength="4" pattern="[0-9]{4}" required>
+            </div>
+            <div class="form-group">
+                <label for="cardInitialBalance">Initial Balance (₹)</label>
+                <input type="number" id="cardInitialBalance" step="0.01" placeholder="0.00" required>
+            </div>
+            <div class="form-group">
+                <label for="cardColor">Card Color</label>
+                <input type="color" id="cardColor" value="#667eea">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="cardCancelBtn">Cancel</button>
+                <button type="submit" class="btn-primary">Add Card</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+
+</html>
